@@ -19,9 +19,10 @@ class Vesocket:
         self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((host, port))
 
-
+    
     (HEX, WAIT_HEADER, IN_KEY, IN_VALUE, IN_CHECKSUM) = range(5)
 
+    
     def input(self, byte):
         if byte == self.hexmarker and self.state != self.IN_CHECKSUM:
             self.state = self.HEX
@@ -72,19 +73,21 @@ class Vesocket:
         else:
             raise AssertionError()
 
-    def read_data_single(self):
-        while True:
-            data = self.socket.recv(1024)
-            for single_byte in data:
-                packet = self.input(single_byte)
-                if (packet != None):
-                    return packet
-            
-
-    def read_data_callback(self, callbackFunction):
+        
+    def read_data_single(self, callbackFunction, converter = None):
         while True:
             data = self.socket.recv(1024)
             for byte in data:
                 packet = self.input(byte)
                 if (packet != None):
-                    callbackFunction(packet)
+                    callbackFunction(packet, converter)
+                    return
+            
+
+    def read_data_loop(self, callbackFunction, converter = None):
+        while True:
+            data = self.socket.recv(1024)
+            for byte in data:
+                packet = self.input(byte)
+                if (packet != None):
+                    callbackFunction(packet, converter)

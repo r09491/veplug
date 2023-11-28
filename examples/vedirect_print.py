@@ -7,7 +7,7 @@ import argparse
 
 from vesocket import Vesocket
 
-def print_data_callback(packet):
+def print_data_callback(packet, converter):
     print(packet)
 
 
@@ -31,7 +31,7 @@ def main():
         return 1
 
     try:
-        print(ve.read_data_callback(print_data_callback))
+        print(ve.read_data_loop(print_data_callback, None))
     except KeyboardInterrupt:
         pass
     

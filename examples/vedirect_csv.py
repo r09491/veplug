@@ -12,7 +12,15 @@ import argparse
 from vesocket import Vesocket
 from veserial.veconverters import LATEST_CONVERTER, convert 
 
+def print_converted_keys(packet, converter):
+    converted = convert(packet, converter)
+    print('\t'.join(converted.keys()))
 
+def print_converted_values(packet, converter):
+    converted = convert(packet, converter)
+    print('\t'.join(converted.values()))
+
+    
 def parse_args():
     parser = argparse.ArgumentParser(description='Process VE.Direct protocol with telnet socket')
 
@@ -45,13 +53,11 @@ def main():
     converter = dict([(k, LATEST_CONVERTER[k]) for k in keys])
 
     try:
-        data = ve.read_data_single()
-        result = convert(data, converter)
-        print('\t'.join(result.keys()))
-        print('\t'.join(result.values()))
+        ve.read_data_single( print_converted_keys, converter)
+        ve.read_data_loop( print_converted_values, converter)
     except KeyboardInterrupt:
         pass
-    
+
     ve.socket.close()
     return 0
 
