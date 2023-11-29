@@ -7,16 +7,17 @@ Outputs a single VEDirect record
 
 import sys
 import os
+import time
 import argparse
 
 from vesocket import Vesocket
-from veserial.veconverters import LATEST_CONVERTER, convert 
+from veserial.veconverters import LATEST_CONVERTER, PRODUCT_CONVERTER, convert 
 
-def print_converted_keys(packet, converter):
+def print_keys(packet, converter):
     converted = convert(packet, converter)
     print('\t'.join(converted.keys()))
 
-def print_converted_values(packet, converter):
+def print_values(packet, converter):
     converted = convert(packet, converter)
     print('\t'.join(converted.values()))
 
@@ -44,17 +45,26 @@ def main():
         print("Cannot connect to Telnet server. Running?")
         return 1
     
-    keys = [key.strip() for key in args.keys.split(',')]
-    for key in keys:
+    latest_keys = [key.strip() for key in args.keys.split(',')]
+    for key in latest_keys:
         if not key in LATEST_CONVERTER.keys() or LATEST_CONVERTER[key] is None:
             print(f"Illegal key '{key}' provided")
             return 2
 
-    converter = dict([(k, LATEST_CONVERTER[k]) for k in keys])
+    latest_converter = dict([(k, LATEST_CONVERTER[k]) for k in latest_keys])
+
+
+    ve.convert_packet_single( print_values, PRODUCT_CONVERTER)
+    print()
 
     try:
-        ve.read_data_single( print_converted_keys, converter)
-        ve.read_data_loop( print_converted_values, converter)
+        while True:
+            ve.convert_packet_single( print_keys, latest_converter)
+            for i in range(20):
+                ve.convert_packet_single( print_values, latest_converter)
+                time.sleep(60)
+            print()
+                
     except KeyboardInterrupt:
         pass
 

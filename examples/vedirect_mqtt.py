@@ -25,4 +25,4 @@ if __name__ == '__main__':
             if key != 'SER#': # topic cannot contain MQTT wildcards
                 client.publish(args.topicprefix + key, value)
 
-    ve.read_data_callback(mqtt_send_callback)
+    ve.convert_packet_loop(mqtt_send_callback, None)

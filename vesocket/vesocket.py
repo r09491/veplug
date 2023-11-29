@@ -74,7 +74,16 @@ class Vesocket:
             raise AssertionError()
 
         
-    def read_data_single(self, callbackFunction, converter = None):
+    def read_packet_single(self):
+        while True:
+            data = self.socket.recv(1024)
+            for byte in data:
+                packet = self.input(byte)
+                if (packet != None):
+                    return packet
+            
+        
+    def convert_packet_single(self, callbackFunction, converter = None):
         while True:
             data = self.socket.recv(1024)
             for byte in data:
@@ -84,7 +93,7 @@ class Vesocket:
                     return
             
 
-    def read_data_loop(self, callbackFunction, converter = None):
+    def convert_packet_loop(self, callbackFunction, converter = None):
         while True:
             data = self.socket.recv(1024)
             for byte in data:

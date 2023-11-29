@@ -1,6 +1,7 @@
 __doc__ = """
 Defines filter tables for converting the serial VE stream
 """
+from datetime import datetime
 from veserial.vemappings import PID, CS, MPPT, OR, ERROR
 
 
@@ -37,14 +38,18 @@ def mppt(left, right, info):
 def or_(left, right, info):
     return f'{OR[left]}'
 
-
 def err(left, right, info):
     return f'{ERROR[left]}'
 
+def time(left, right, info):
+    scale, form, unit = info
+    return datetime.now().strftime(f'{form}')
+
 
 FULL_CONVERTER = {
+    'TIME': [time,  None,  None,     None, '%H:%M', None],
     'PID':  [pid,  'PID',  None,     None,  None, None],
-    'FW':   [num1,  'FW',  None,     None,  None, None],
+    'FW':   [mul1,  'FW',  None, 0.010000, '.2f',   ''],
     'SER#': [copy,'SER#',  None,     None,  None, None],
     'V':    [mul1,   'V',  None, 0.001000, '.2f',  'V'],
     'I':    [mul1,   'I',  None, 0.001000, '.2f',  'A'],
@@ -69,6 +74,7 @@ FULL_CONVERTER = {
 
 
 LATEST_CONVERTER = {
+    'TIME': [time,  None,  None,     None, '%H:%M', None],
     'V':    [mul1,   'V',  None, 0.001000, '.2f',  'V'],
     'I':    [mul1,   'I',  None, 0.001000, '.2f',  'A'],
     'P':    [mul2,   'V',   'I', 0.000001, '.0f',  'W'],
@@ -82,7 +88,7 @@ LATEST_CONVERTER = {
 
 PRODUCT_CONVERTER = {
     'PID':  [pid,  'PID',  None,     None,  None, None],
-    'FW':   [num1,  'FW',  None,     None,  None, None],
+    'FW':   [mul1,  'FW',  None, 0.010000, '.2f',   ''],
     'SER#': [copy,'SER#',  None,     None,  None, None]}
 
 

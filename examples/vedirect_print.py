@@ -31,7 +31,7 @@ def main():
         return 1
 
     try:
-        print(ve.read_data_loop(print_data_callback, None))
+        print(ve.read_packet_single())
     except KeyboardInterrupt:
         pass
     
