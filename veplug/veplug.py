@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import socket
+import serial
+class Veplug():
 
-class Vesocket:
-
-    def __init__(self, host, port):
+    def __init__(self):
         self.header1 = ord('\r')
         self.header2 = ord('\n')
         self.hexmarker = ord(':')
@@ -16,8 +16,8 @@ class Vesocket:
         self.state = self.WAIT_HEADER
         self.dict = {}
 
-        self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((host, port))
+        self.plug = None
+        self.read = None
 
     
     (HEX, WAIT_HEADER, IN_KEY, IN_VALUE, IN_CHECKSUM) = range(5)
@@ -27,7 +27,6 @@ class Vesocket:
         if byte == self.hexmarker and self.state != self.IN_CHECKSUM:
             self.state = self.HEX
             
-        
         if self.state == self.WAIT_HEADER:
             self.bytes_sum += byte
             if byte == self.header1:
@@ -76,7 +75,7 @@ class Vesocket:
         
     def read_packet_single(self):
         while True:
-            data = self.socket.recv(1024)
+            data = self.read(1024)
             for byte in data:
                 packet = self.input(byte)
                 if (packet != None):
@@ -85,7 +84,7 @@ class Vesocket:
         
     def convert_packet_single(self, callbackFunction, converter = None):
         while True:
-            data = self.socket.recv(1024)
+            data = self.read(1024)
             for byte in data:
                 packet = self.input(byte)
                 if (packet != None):
@@ -100,3 +99,25 @@ class Vesocket:
                 packet = self.input(byte)
                 if (packet != None):
                     callbackFunction(packet, converter)
+
+
+class Vesocket(Veplug):
+
+    def __init__(self, host, port):
+        super().__init__()
+
+        self.plug = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
+        self.read = self.plug.recv
+        self.plug.connect((host, port))
+
+
+        
+class Veserial(Veplug):
+
+    def __init__(self, device, timeout = 60, baudrate = 19200):
+        super().__init__()
+
+        self.plug = serial.Serial(device, baudrate, timeout)
+        self.read = self.plug.read
+
+        

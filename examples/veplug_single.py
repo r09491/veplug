@@ -10,8 +10,8 @@ import os
 
 import argparse
 
-from vesocket import Vesocket
-from veserial.veconverters import LATEST_CONVERTER, convert 
+from veplug import Vesocket
+from veconverters import LATEST_CONVERTER, convert 
 
 def print_keys(packet, converter):
     converted = convert(packet, converter)
@@ -29,6 +29,9 @@ def parse_args():
                         default = 'localhost')
     parser.add_argument('--port', help = 'Telent TCP port',
                         type=int, default = '2323')
+
+    parser.add_argument('--device', help='Serial device', default= None)
+
     parser.add_argument('--keys', help = 'Keys for output',
                         default = ','.join([k for k in LATEST_CONVERTER.keys() if LATEST_CONVERTER[k] is not None]))
 
@@ -40,7 +43,14 @@ def main():
     args = parse_args()
     
     try:
-        ve = Vesocket(args.host, args.port)
+        if args.host is not None and args.port is not None and args.device is None:
+            ve = Vesocket(args.host, args.port)
+        elif args.host is None and args.port is None and args.device is not None:
+            ve = Veserial(args.device)
+        else:
+            print("Illegal input combination.")
+            return 2
+
     except ConnectionRefusedError:
         print("Cannot connect to Telnet server. Running?")
         return 1
@@ -59,7 +69,7 @@ def main():
     except KeyboardInterrupt:
         pass
 
-    ve.socket.close()
+    ve.plug.close()
     return 0
 
 
