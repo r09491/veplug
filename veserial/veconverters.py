@@ -75,12 +75,12 @@ FULL_CONVERTER = {
 
 LATEST_CONVERTER = {
     'TIME': [time,  None,  None,     None, '%H:%M', None],
-    'V':    [mul1,   'V',  None, 0.001000, '.2f',  'V'],
-    'I':    [mul1,   'I',  None, 0.001000, '.2f',  'A'],
-    'P':    [mul2,   'V',   'I', 0.000001, '.0f',  'W'],
     'VPV':  [mul1, 'VPV',  None, 0.001000, '.2f',  'V'],
     'IPV':  [div2, 'PPV', 'VPV', 1000.000, '.2f',  'A'],
     'PPV':  [mul1, 'PPV',  None, 1.000000, '.0f',  'W'],
+    'V':    [mul1,   'V',  None, 0.001000, '.2f',  'V'],
+    'I':    [mul1,   'I',  None, 0.001000, '.2f',  'A'],
+    'P':    [mul2,   'V',   'I', 0.000001, '.0f',  'W'],
     'VL':   [mul1,   'V',  None, 0.001000, '.2f',  'V'],
     'IL':   [mul1,  'IL',  None, 0.001000, '.2f',  'A'],
     'PL':   [mul2,   'V',  'IL', 0.000001, '.0f',  'W']}
