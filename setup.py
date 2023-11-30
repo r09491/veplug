@@ -11,7 +11,9 @@ setup(name='veplug',
       author_email='r09491@gmail.com',
       license='MIT',
       long_description=long_description,
-      packages=['veplug', 'veconverters'],
-      install_requires=[
-      ],
+      packages=['veplug',
+                'veconverters',
+                ],
+      install_requires=['pyserial',
+                        ],
       zip_safe=False)
