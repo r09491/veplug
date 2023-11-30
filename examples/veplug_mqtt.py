@@ -3,13 +3,13 @@
 
 import argparse, os
 import paho.mqtt.client as mqtt
-from veplug import Vesocket
+from veplug import Vesocket, Veserial
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process VE.Direct protocol with telnet socket')
-    parser.add_argument('--host', help='Telnet host', default= 'localhost')
-    parser.add_argument('--port', help='Telent TCP port', type=int, default= '2323')
+    parser.add_argument('--host', help='Telnet host', default= None)
+    parser.add_argument('--port', help='Telent TCP port', type=int, default= None)
     parser.add_argument('--device', help='Serial device', default= None)
     parser.add_argument('--mqttbroker', help='MQTT broker address', type=str, default='test.mosquitto.org')
     parser.add_argument('--mqttbrokerport', help='MQTT broker port', type=int, default='1883')

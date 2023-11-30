@@ -10,7 +10,7 @@ import os
 
 import argparse
 
-from veplug import Vesocket
+from veplug import Vesocket, Veserial
 from veconverters import LATEST_CONVERTER, convert 
 
 def print_keys(packet, converter):
@@ -25,13 +25,9 @@ def print_values(packet, converter):
 def parse_args():
     parser = argparse.ArgumentParser(description='Process VE.Direct protocol with telnet socket')
 
-    parser.add_argument('--host', help = 'Telnet host',
-                        default = 'localhost')
-    parser.add_argument('--port', help = 'Telent TCP port',
-                        type=int, default = '2323')
-
+    parser.add_argument('--host', help = 'Telnet host', default = None)
+    parser.add_argument('--port', help = 'Telent TCP port', type=int, default = None)
     parser.add_argument('--device', help='Serial device', default= None)
-
     parser.add_argument('--keys', help = 'Keys for output',
                         default = ','.join([k for k in LATEST_CONVERTER.keys() if LATEST_CONVERTER[k] is not None]))
 
