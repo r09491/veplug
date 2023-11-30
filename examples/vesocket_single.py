@@ -7,7 +7,7 @@ Outputs a single VEDirect record
 
 import sys
 import os
-import time
+
 import argparse
 
 from vesocket import Vesocket
@@ -54,7 +54,8 @@ def main():
     latest_converter = dict([(k, LATEST_CONVERTER[k]) for k in latest_keys])
 
     try:
-        ve.convert_packet_single( print_keys, latest_converter)        
+        for output in [print_values]:
+            ve.convert_packet_single( output, latest_converter)        
     except KeyboardInterrupt:
         pass
 
