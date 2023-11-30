@@ -53,10 +53,10 @@ FULL_CONVERTER = {
     'SER#': [copy,'SER#',  None,     None,  None, None],
     'V':    [mul1,   'V',  None, 0.001000, '.2f',  'V'],
     'I':    [mul1,   'I',  None, 0.001000, '.2f',  'A'],
-    'P':    [mul2,   'V',   'I', 0.000001, '.0f',  'W'],
+    'P':    [mul2,   'V',   'I', 0.000001, '.1f',  'W'],
     'VPV':  [mul1, 'VPV',  None, 0.001000, '.2f',  'V'],
     'IPV':  [div2, 'PPV', 'VPV', 1000.000, '.2f',  'A'],
-    'PPV':  [mul1, 'PPV',  None, 1.000000, '.0f',  'W'],
+    'PPV':  [mul1, 'PPV',  None, 1.000000, '.1f',  'W'],
     'CS':   [cs,    'CS',  None,     None,  None, None],
     'MPPT': [mppt,'MPPT',  None,     None,  None, None],
     'OR':   [or_,   'OR',  None,     None,  None, None],
@@ -64,7 +64,7 @@ FULL_CONVERTER = {
     'LOAD': [copy,'LOAD',  None,     None,  None, None],
     'VL':   [mul1,   'V',  None, 0.001000, '.2f',  'V'],
     'IL':   [mul1,  'IL',  None, 0.001000, '.2f',  'A'],
-    'PL':   [mul2,   'V',  'IL', 0.000001, '.0f',  'W'],
+    'PL':   [mul2,   'V',  'IL', 0.000001, '.1f',  'W'],
     'H19':  [mul1, 'H19',  None, 1.000000, '.0f', 'Wh'],
     'H20':  [mul1, 'H20',  None, 10.00000, '.0f', 'Wh'],
     'H21':  [mul1, 'H21',  None, 1.000000, '.0f',  'W'],
@@ -77,13 +77,13 @@ LATEST_CONVERTER = {
     'TIME': [time,  None,  None,     None, '%H:%M', None],
     'VPV':  [mul1, 'VPV',  None, 0.001000, '.2f',  'V'],
     'IPV':  [div2, 'PPV', 'VPV', 1000.000, '.2f',  'A'],
-    'PPV':  [mul1, 'PPV',  None, 1.000000, '.0f',  'W'],
+    'PPV':  [mul1, 'PPV',  None, 1.000000, '.1f',  'W'],
     'V':    [mul1,   'V',  None, 0.001000, '.2f',  'V'],
     'I':    [mul1,   'I',  None, 0.001000, '.2f',  'A'],
-    'P':    [mul2,   'V',   'I', 0.000001, '.0f',  'W'],
+    'P':    [mul2,   'V',   'I', 0.000001, '.1f',  'W'],
     'VL':   [mul1,   'V',  None, 0.001000, '.2f',  'V'],
     'IL':   [mul1,  'IL',  None, 0.001000, '.2f',  'A'],
-    'PL':   [mul2,   'V',  'IL', 0.000001, '.0f',  'W']}
+    'PL':   [mul2,   'V',  'IL', 0.000001, '.1f',  'W']}
 
 
 PRODUCT_CONVERTER = {
