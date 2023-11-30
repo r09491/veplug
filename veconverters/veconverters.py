@@ -2,7 +2,7 @@ __doc__ = """
 Defines filter tables for converting the serial VE stream
 """
 from datetime import datetime
-from veserial.vemappings import PID, CS, MPPT, OR, ERROR
+from veconverters.vemappings import PID, CS, MPPT, OR, ERROR
 
 
 def mul1(left, right, info):

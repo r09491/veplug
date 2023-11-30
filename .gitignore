@@ -1,6 +1,7 @@
 *~
 *.pyc
 *.egg-info
+.vveplug
 __pycache__
 build
 

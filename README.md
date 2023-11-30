@@ -1,6 +1,6 @@
 VESocket is a Python library for decoding the Victron Energy VE.Direct text protocol used in their range of MPPT solar charge controllers.
 
-This work is heavily based on the [https://github.com/karioja/vedirect] (VEDirect) package. VEDirect directly reads the stream from a serial port. VESocket is modified to receive data from a (Telnet) server which in turn may get them from a serial Victron device.
+This work is heavily based on the [https://github.com/karioja/vedirect] (VEDirect) package. VEDirect directly reads the stream from a serial port. VESocket is extended to receive data from a (Telnet) server which in turn may get them from a serial Victron device.
 
 VESocket provides Python scripting options in a 'Termux' environment running on a smartphone (not only). 'Termux' must not access the serial port of the host environment system by design. However Android apps are allowed reading serial streams via an OTG cable and providing them to clients using Telnet.
 
@@ -13,11 +13,11 @@ To install:
 * Enter the directory 'vesocket'
 * pip install .
 
-To test
+To test:
 * Enter the directory 'examples'
 * Plug the OTG cable into the phone
   -> Serial USB stream app is started automtically
-* ./vesocket_print.py
+* ./veplug_print.py host = 'localhost' port = 2323
   -> Dump output to the screen
 
-The script 'vesocket_mqtt.py' is only ported but not tested yet.
+The script 'veplug_mqtt.py' is only ported but not tested yet.

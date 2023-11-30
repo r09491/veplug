@@ -75,7 +75,7 @@ class Veplug():
         
     def read_packet_single(self):
         while True:
-            data = self.read(1024)
+            data = self.read(self.size)
             for byte in data:
                 packet = self.input(byte)
                 if (packet != None):
@@ -84,7 +84,7 @@ class Veplug():
         
     def convert_packet_single(self, callbackFunction, converter = None):
         while True:
-            data = self.read(1024)
+            data = self.read(self.size)
             for byte in data:
                 packet = self.input(byte)
                 if (packet != None):
@@ -94,7 +94,7 @@ class Veplug():
 
     def convert_packet_loop(self, callbackFunction, converter = None):
         while True:
-            data = self.socket.recv(1024)
+            data = self.read(self.size)
             for byte in data:
                 packet = self.input(byte)
                 if (packet != None):
@@ -108,6 +108,7 @@ class Vesocket(Veplug):
 
         self.plug = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
         self.read = self.plug.recv
+        self.size = 1024
         self.plug.connect((host, port))
 
 
@@ -117,7 +118,8 @@ class Veserial(Veplug):
     def __init__(self, device, timeout = 60, baudrate = 19200):
         super().__init__()
 
-        self.plug = serial.Serial(device, baudrate, timeout)
+        self.plug = serial.Serial(device, baudrate = baudrate, timeout = timeout)
         self.read = self.plug.read
+        self.size = 1
 
         
