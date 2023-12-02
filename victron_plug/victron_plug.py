@@ -3,7 +3,7 @@
 
 import socket
 import serial
-class Veplug():
+class Victron_Plug():
 
     def __init__(self):
         self.header1 = ord('\r')
@@ -101,7 +101,7 @@ class Veplug():
                     callbackFunction(packet, converter)
 
 
-class Vesocket(Veplug):
+class Victron_Socket(Victron_Plug):
 
     def __init__(self, host, port):
         super().__init__()
@@ -113,7 +113,7 @@ class Vesocket(Veplug):
 
 
         
-class Veserial(Veplug):
+class Victron_Serial(Victron_Plug):
 
     def __init__(self, device, timeout = 60, baudrate = 19200):
         super().__init__()
@@ -121,5 +121,3 @@ class Veserial(Veplug):
         self.plug = serial.Serial(device, baudrate = baudrate, timeout = timeout)
         self.read = self.plug.read
         self.size = 1
-
-        
