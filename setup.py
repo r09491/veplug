@@ -11,15 +11,7 @@ setup(name='victron_plug',
       author_email='r09491@gmail.com',
       license='MIT',
       long_description=long_description,
-<<<<<<< HEAD
-      packages=['veplug',
-                'veconverters',
-                ],
-      install_requires=['pyserial',
-                        ],
-=======
       packages=['victron_plug', 'victron_converters'],
       install_requires=[
       ],
->>>>>>> work
       zip_safe=False)
