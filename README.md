@@ -10,7 +10,7 @@ This library was tested on my old 'Huaweii P9 light' with 'Termux' from 'Fdroid'
 
 To install:
 * Clone the project
-* Enter the directory 'victon_plug'
+* Enter the directory 'victron_plug'
 * pip install .
 
 To test:
