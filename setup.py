@@ -12,6 +12,5 @@ setup(name='victron_plug',
       license='MIT',
       long_description=long_description,
       packages=['victron_plug', 'victron_converters'],
-      install_requires=[
-      ],
+      install_requires=[],
       zip_safe=False)

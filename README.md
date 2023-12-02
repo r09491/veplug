@@ -12,7 +12,7 @@ The only Victron device I have is the smart solar controller MPPT 75/15. Its ser
 
 To install:
 * Clone the project
-* Enter the directory 'victon_plug'
+* Enter the directory 'victron_plug'
 * pip install .
 
 To test:
