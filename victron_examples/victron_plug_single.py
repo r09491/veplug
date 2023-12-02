@@ -10,8 +10,9 @@ import os
 
 import argparse
 
-from veplug import Vesocket, Veserial
-from veconverters import LATEST_CONVERTER, convert 
+from victron_plug import Victron_Socket, Victron_Serial
+from victron_converters import LATEST_CONVERTER, convert 
+
 
 def print_keys(packet, converter):
     converted = convert(packet, converter)
@@ -40,9 +41,9 @@ def main():
     
     try:
         if args.host is not None and args.port is not None and args.device is None:
-            ve = Vesocket(args.host, args.port)
+            vp = Victron_Socket(args.host, args.port)
         elif args.host is None and args.port is None and args.device is not None:
-            ve = Veserial(args.device)
+            vp = Victron_Serial(args.device)
         else:
             print("Illegal input combination.")
             return 2
@@ -61,11 +62,11 @@ def main():
 
     try:
         for output in [print_values]:
-            ve.convert_packet_single( output, latest_converter)        
+            vp.convert_packet_single( output, latest_converter)        
     except KeyboardInterrupt:
         pass
 
-    ve.plug.close()
+    vp.plug.close()
     return 0
 
 

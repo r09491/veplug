@@ -5,7 +5,7 @@ import sys
 import os
 import argparse
 
-from veplug import Vesocket, Veserial
+from victron_plug import Victron_Socket, Victron_Serial
 
 def print_data_callback(packet, converter):
     print(packet)
@@ -27,9 +27,9 @@ def main():
     
     try:
         if args.host is not None and args.port is not None and args.device is None:
-            ve = Vesocket(args.host, args.port)
+            vp = Victron_Socket(args.host, args.port)
         elif args.host is None and args.port is None and args.device is not None:
-            ve = Veserial(args.device)
+            vp = Victron_Serial(args.device)
         else:
             print("Illegal input combination.")
             return 2
@@ -39,11 +39,11 @@ def main():
         return 1
 
     try:
-        print(ve.read_packet_single())
+        print(vp.read_packet_single())
     except KeyboardInterrupt:
         pass
     
-    ve.plug.close()
+    vp.plug.close()
     return 0
 
 
