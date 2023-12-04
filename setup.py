@@ -4,13 +4,24 @@ with open("README.md", 'r') as f:
     long_description = f.read()
     
 setup(name='victron_plug',
-      version='0.1',
+      version='0.2',
       description='Victron serial VE.Direct decoder',
       url='https://github.com/r09491/vesocket',
       author='r09491',
       author_email='r09491@gmail.com',
       license='MIT',
       long_description=long_description,
-      packages=['victron_plug', 'victron_converters'],
-      install_requires=[],
+      scripts=[
+          './victron_plug_scripts/victron_plug_latest_single.py',
+          './victron_plug_scripts/victron_plug_latest_loop.py',
+          './victron_plug_scripts/victron_plug_mppt_watts.py',
+          './victron_plug_scripts/victron_plug_mppt_watt_hours.py',
+          './victron_plug_scripts/victron_plug_mppt_aliases.sh',
+      ],
+      packages=['victron_plug',
+                'victron_converters'],
+      install_requires=['pyserial',
+                        'pandas',
+                        'termgraph',
+      ],
       zip_safe=False)
