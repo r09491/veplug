@@ -25,35 +25,37 @@ def estimate_load_off(f = sys.stdin):
     vldf.P = vldf.P.apply(strip_unit)
     vldf.PPV = vldf.PPV.apply(strip_unit)
 
-    t_start = vldf.TIME.iloc[0]
-    t_now = vldf.TIME.iloc[-1]
-
-    vl_start = vldf.VL.iloc[0]
-    vl_now = vldf.VL.iloc[-1]
-    
-    t0 = datetime.strptime( t_start, '%H:%M')
-    t1 = datetime.strptime( t_now, '%H:%M')
-    dt = (t1 - t0).total_seconds()
-    
-    discharge_rate = (vl_now - vl_start) / dt
-
     pl_mean = np.mean(np.array(vldf.PL))
     p_mean = np.mean(np.array(vldf.P))
     ppv_mean = np.mean(np.array(vldf.PPV))
 
+
+    vl_start = vldf.VL.iloc[0]
+    vl_now = vldf.VL.iloc[-1]
     vl_delta = vl_now - V_LOAD_OFF
 
+    
+    t_start = vldf.TIME.iloc[0]
+    t_now = vldf.TIME.iloc[-1]
+    t0 = datetime.strptime( t_start, '%H:%M')
+    t1 = datetime.strptime( t_now, '%H:%M')
+    dt = (t1 - t0).total_seconds()
+
+    
     text = f'TIME {t_now}'
     text += f' SOLAR {ppv_mean:.1f} W'
     text += f' BAT {p_mean:.1f} W'
     text += f' LOAD {pl_mean:.1f} W'
     text += f' VL {vl_now:.2f} V'    
-    
-    if vl_now < V_LOAD_DISCHARGE and discharge_rate < 0.0 and vl_delta > 0.0:
-        load_off_secs = abs(vl_delta / discharge_rate)
-        load_off_time = t1 + timedelta(seconds = load_off_secs)
 
-        text += f' LOAD OFF {load_off_secs/3600:.1f} h @ {load_off_time.strftime("%H:%M")}'
+
+    if vl_now < V_LOAD_DISCHARGE and dt > 0.0 and vl_delta > 0.0:
+        discharge_rate = (vl_now - vl_start) / dt
+        if discharge_rate < 0.0:
+            load_off_secs = abs(vl_delta / discharge_rate)
+            load_off_time = t1 + timedelta(seconds = load_off_secs)
+
+            text += f' LOAD OFF {load_off_secs/3600:.1f} h @ {load_off_time.strftime("%H:%M")}'
         
     print(text)
 
