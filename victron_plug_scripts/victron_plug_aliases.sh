@@ -1,3 +1,5 @@
+# To run in interactive shells VICTRON_PLUG_STORE_DIR is defined in '.bashrc'
+
 alias tail_victron_latest="tail -f \$VICTRON_PLUG_STORE_DIR/victron_plug_latest_\$(date +%y%m%d).log"
 
 alias tail_victron_watts="tail -f \$VICTRON_PLUG_STORE_DIR/victron_plug_watts_\$(date +%y%m%d).log"
