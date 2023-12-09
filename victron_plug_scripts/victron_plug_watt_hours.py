@@ -29,12 +29,20 @@ def sum_power(f = sys.stdin):
     p_sum = np.sum(np.array(vldf.P)) / INPUT_SAMPLE_RATE
     pl_sum = np.sum(np.array(vldf.PL)) / INPUT_SAMPLE_RATE
 
+    p_is_charged = vldf.P > 0.0
+    p_is_discharged = vldf.P < 0.0    
+    p_charge_sum = np.sum(np.array(vldf.P)[p_is_charged]) / INPUT_SAMPLE_RATE
+    p_discharge_sum = np.sum(np.array(vldf.P)[p_is_discharged]) / INPUT_SAMPLE_RATE
+
     t_now = vldf.TIME.iloc[-1]
 
     text = f'TIME {t_now}'
     text += f' SOLAR {ppv_sum:.1f} Wh'
+    text += f' +BAT {p_charge_sum:.1f} Wh'
+    text += f' -BAT {p_discharge_sum:.1f} Wh'
     text += f' BAT {p_sum:.1f} Wh'
     text += f' LOAD {pl_sum:.1f} Wh'
+    text += f' SYS {-ppv_sum + p_sum + pl_sum:.1f} Wh'
     
     print(text)
 
