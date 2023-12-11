@@ -38,11 +38,11 @@ def sum_power(f = sys.stdin):
 
     text = f'TIME {t_now}'
     text += f' SOLAR {ppv_sum:.1f} Wh'
-    text += f' +BAT {p_charge_sum:.1f} Wh'
-    text += f' -BAT {p_discharge_sum:.1f} Wh'
-    text += f' BAT {p_sum:.1f} Wh'
+    text += f' +BAT {p_charge_sum:+.1f} Wh'
+    text += f' -BAT {p_discharge_sum:+.1f} Wh'
+    text += f' BAT {p_sum:+.1f} Wh'
     text += f' LOAD {pl_sum:.1f} Wh'
-    text += f' SYS {-ppv_sum + p_sum + pl_sum:.1f} Wh'
+    text += f' SYS {-ppv_sum + p_sum + pl_sum:+.1f} Wh'
     
     print(text)
 

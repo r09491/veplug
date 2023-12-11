@@ -44,7 +44,7 @@ def estimate_load_off(f = sys.stdin):
 
     text = f'TIME {t_now}'
     text += f' SOLAR {ppv_mean:.1f} W'
-    text += f' BAT {p_mean:.1f} W'
+    text += f' BAT {p_mean:+.1f} W'
     text += f' LOAD {pl_mean:.1f} W'
     text += f' SYS {-ppv_mean + p_mean + pl_mean:.1f} W'
     text += f' VL {vl_now:.2f} V'    
