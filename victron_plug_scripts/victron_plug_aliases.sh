@@ -22,4 +22,5 @@ alias victron_watt_hours="tail -n 5 \$VICTRON_PLUG_STORE_DIR/victron_plug_watt_h
 			    termgraph --color {blue,red,green,yellow} --suffix 'Wh' \
 			    	      --title 'Victron MPPT Watt-Hours (SOLAR, BAT, LOAD, SYS)'"
 
+alias victron_plot="victron_plug_plot.sh"
 

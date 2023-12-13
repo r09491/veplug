@@ -7,59 +7,75 @@ import numpy as np
 
 from datetime import datetime, timedelta
 
-def strip_unit(value):
-    return float(value[:-1])
-
-V_RATE_PERIOD = 60 # Minutes
+V_SAMPLES = 60 # 1 hour
 V_LOAD_OFF = 12.1 # V
 V_LOAD_DISCHARGE = 12.8 #V
+
+def strip_unit(value):
+    return float(value[:-1])
 
 def estimate_load_off(f = sys.stdin):
     sep = '\t'
     names = 'TIME,VPV,IPV,PPV,V,I,P,VL,IL,PL'.split(',')
-    df = pd.read_csv(f, sep = sep, names = names).tail(V_RATE_PERIOD+1)
+    df = pd.read_csv(f, sep = sep, names = names).tail(V_SAMPLES)
 
     vldf = df.loc[:,['TIME','VL', 'PL', 'PPV', 'P']]
-    vldf.VL = vldf.VL.apply(strip_unit)
-    vldf.PL = vldf.PL.apply(strip_unit)
-    vldf.P = vldf.P.apply(strip_unit)
-    vldf.PPV = vldf.PPV.apply(strip_unit)
 
-    pl_mean = np.mean(np.array(vldf.PL)[-int(V_RATE_PERIOD/4):])
-    p_mean = np.mean(np.array(vldf.P)[-int(V_RATE_PERIOD/4):])
-    ppv_mean = np.mean(np.array(vldf.PPV)[-int(V_RATE_PERIOD/4):])
+    """ The timestamps """
+    t = np.array(vldf.TIME)
+    
+    """ The battery voltage samples """
+    vl = np.array(vldf.VL.apply(strip_unit))
 
-
-    vl_start = vldf.VL.iloc[0]
-    vl_now = vldf.VL.iloc[-1]
-    #vl_delta = vl_now - V_LOAD_OFF
-    vl_delta = vl_now - vl_start 
+    """ The power samples """
+    pl = np.array(vldf.PL.apply(strip_unit))
+    p = np.array(vldf.P.apply(strip_unit))
+    ppv = np.array(vldf.PPV.apply(strip_unit))
 
     
-    t_start = vldf.TIME.iloc[0]
-    t_now = vldf.TIME.iloc[-1]
-    t0 = datetime.strptime( t_start, '%H:%M')
-    t1 = datetime.strptime( t_now, '%H:%M')
-    dt = (t1 - t0).total_seconds()
+    """ Calculate the means  """
+    pl_mean = np.mean(pl)
+    p_mean = np.mean(p)
+    ppv_mean = np.mean(ppv)
 
-    text = f'TIME {t_now}'
+    text = f'TIME {t[-1]}'
     text += f' SOLAR {ppv_mean:.1f} W'
     text += f' BAT {p_mean:+.1f} W'
     text += f' LOAD {pl_mean:.1f} W'
     text += f' SYS {-ppv_mean + p_mean + pl_mean:.1f} W'
-    text += f' VL {vl_now:.2f} V'    
+    text += f' VL {vl[-1]:.2f} V'    
 
 
-    if V_LOAD_OFF < vl_now < V_LOAD_DISCHARGE and dt > 0.0 and vl_delta < 0.0:
-        discharge_rate = vl_delta / dt
-
-        load_off_secs = (V_LOAD_OFF - vl_now) / discharge_rate
-        text += f' LOAD OFF {load_off_secs/3600:.1f} h'
-
-        if load_off_secs < 24*3600:
-            load_off_time = t1 + timedelta(seconds = load_off_secs)
-            text += f' @ {load_off_time.strftime("%H:%M")}'
+    if vl[0] < V_LOAD_DISCHARGE:
         
+        """ Forecast LOAD OFF time for discharge """
+
+        samples = len(vl)
+        vl_minutes = np.arange(samples)
+        fit = np.polyfit(vl_minutes, vl, 1)
+        line = np.poly1d(fit)
+
+        """ Find the minute when to stop loading in the next 24h """
+    
+        load_off_minute = None
+        for first_minute in range(samples, 23*samples, samples):
+            """ The minutes of the next period """
+            next_minutes = vl_minutes + first_minute
+            """ The estimates of the next period """
+            next_volts = line(next_minutes)
+            """ The values larger than the load off """
+            checked_minutes = next_minutes[next_volts > V_LOAD_OFF]
+            if len(checked_minutes) < samples:
+                load_off_minute = checked_minutes[-1]
+                break
+
+        if load_off_minute is not None:
+            text += f' LOAD OFF {load_off_minute/60:.1f} h'
+
+            load_off_time = datetime.strptime(t[-1], "%H:%M") + \
+                timedelta(minutes = int(load_off_minute))
+            text += f' @ {load_off_time.strftime("%H:%M")}'
+
     print(text)
 
     return 0

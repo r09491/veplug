@@ -14,6 +14,8 @@ setup(name='victron_plug',
       scripts=[
           './victron_plug_scripts/victron_plug_latest_single.py',
           './victron_plug_scripts/victron_plug_latest_loop.py',
+          './victron_plug_scripts/victron_plug_plot.py',
+          './victron_plug_scripts/victron_plug_plot.sh',
           './victron_plug_scripts/victron_plug_watts.py',
           './victron_plug_scripts/victron_plug_watt_hours.py',
           './victron_plug_scripts/victron_plug_latest_serial_cron.sh',
