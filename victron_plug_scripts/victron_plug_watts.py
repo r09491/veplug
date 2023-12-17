@@ -8,7 +8,7 @@ import numpy as np
 from datetime import datetime, timedelta
 
 
-V_SAMPLES = 120 # 2 hour
+V_SAMPLES = 60 # 2 hour
 V_LOAD_OFF = 12.1 # V
 V_LOAD_DISCHARGE = 12.8 #V
 
@@ -51,17 +51,24 @@ def estimate_load_off(f = sys.stdin):
 
     if vl[0] > vl[-1] and vl[0] < V_LOAD_DISCHARGE and samples >= V_SAMPLES:
         
-        """ Forecast LOAD OFF time for discharge """
+        """ Forecast LOAD OFF time for discharge
 
-        mid = int(samples/2)
-        v0, v1 = vl[:mid].mean(), vl[mid:].mean()
-        load_off_hours = (V_LOAD_OFF - v1) / (v1 - v0)  
+        Graphical plot of discharge shows exponential behaviour y = a * b**x
 
+        As per setup there are samples for one hour. This result in: a = vl[0], b = vl[-1]/vl[0]
+
+        The hours to load off can then be determined by the below equation
+
+        """
+
+        load_off_hours = (np.log(V_LOAD_OFF) - np.log(vl[0])) / (np.log(vl[-1]) -np.log(vl[0]))        
+        load_off_hours -= 1.0
         text += f' LOAD OFF {load_off_hours:.1f} h'
 
-        load_off_time = datetime.strptime(t[-1], "%H:%M") + \
+        if load_off_hours < 24 :
+            load_off_time = datetime.strptime(t[-1], "%H:%M") + \
                 timedelta(minutes = int(load_off_hours * 60))
-        text += f' @ {load_off_time.strftime("%H:%M")}'
+            text += f' @ {load_off_time.strftime("%H:%M")}'
 
     print(text)
 
