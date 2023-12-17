@@ -23,4 +23,5 @@ alias victron_watt_hours="tail -n 5 \$VICTRON_PLUG_STORE_DIR/victron_plug_watt_h
 			    	      --title 'Victron MPPT Watt-Hours (SOLAR, BAT, LOAD, SYS)'"
 
 alias victron_plot="victron_plug_plot.sh"
+alias victron_plot_yesterday="victron_plug_plot_yesterday.sh"
 
