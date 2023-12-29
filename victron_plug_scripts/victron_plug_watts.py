@@ -19,23 +19,23 @@ def strip_unit(value):
 
 def estimate_load_off(f = sys.stdin):
     sep = '\t'
-    names = 'TIME,VPV,IPV,PPV,V,I,P,VL,IL,PL'.split(',')
+    names = 'TIME,VPV,IPV,PPV,V,I,P,IL,PL'.split(',')
     df = pd.read_csv(f, sep = sep, names = names).tail(V_SAMPLES)
 
-    vldf = df.loc[:,['TIME','VL', 'PL', 'PPV', 'P']]
+    vdf = df.loc[:,['TIME','V', 'PL', 'PPV', 'P']]
 
     """ The timestamps """
-    t = np.array(vldf.TIME)
+    t = np.array(vdf.TIME)
     
     """ The battery voltage samples """
-    vl = np.array(vldf.VL.apply(strip_unit))
+    v = np.array(vdf.V.apply(strip_unit))
 
-    samples = len(vl)
+    samples = len(v)
 
     """ The power samples """
-    pl = np.array(vldf.PL.apply(strip_unit))
-    p = np.array(vldf.P.apply(strip_unit))
-    ppv = np.array(vldf.PPV.apply(strip_unit))
+    pl = np.array(vdf.PL.apply(strip_unit))
+    p = np.array(vdf.P.apply(strip_unit))
+    ppv = np.array(vdf.PPV.apply(strip_unit))
 
     """ Calculate the means over the last hour """
     pl_mean = np.mean(pl[int(samples/2):])
@@ -47,21 +47,21 @@ def estimate_load_off(f = sys.stdin):
     text += f' BAT {p_mean:+.1f} W'
     text += f' LOAD {pl_mean:.1f} W'
     text += f' SYS {-ppv_mean + p_mean + pl_mean:.1f} W'
-    text += f' VL {vl[-1]:.2f} V'    
+    text += f' V {v[-1]:.2f} V'    
 
-    if vl[0] > vl[-1] and vl[0] < V_LOAD_DISCHARGE and samples >= V_SAMPLES:
+    if v[0] > v[-1] and v[0] < V_LOAD_DISCHARGE and samples >= V_SAMPLES:
         
         """ Forecast LOAD OFF time for discharge
 
         Graphical plot of discharge shows exponential behaviour y = a * b**x
 
-        As per setup there are samples for one hour. This result in: a = vl[0], b = vl[-1]/vl[0]
+        As per setup there are samples for one hour. This result in: a = v[0], b = v[-1]/v[0]
 
         The hours to load off can then be determined by the below equation
 
         """
 
-        load_off_hours = (np.log(V_LOAD_OFF) - np.log(vl[0])) / (np.log(vl[-1]) -np.log(vl[0]))        
+        load_off_hours = (np.log(V_LOAD_OFF) - np.log(v[0])) / (np.log(v[-1]) -np.log(v[0]))        
         load_off_hours -= 1.0
         text += f' LOAD OFF {load_off_hours:.1f} h'
 

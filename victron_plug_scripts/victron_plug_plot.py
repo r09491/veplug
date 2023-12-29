@@ -42,11 +42,11 @@ def plot_volts(time, vpv, v, ppv, p, pl):
         axes[0].set_ylabel('Volts [V]')
         axes[0].xaxis.set_major_formatter(dformatter)
 
-        axes[1].plot(time, v, color='red', linewidth=4, label='Bat')
-        axes[1].axhline(12.1, color='magenta', linewidth=6, label='Empty')
-        axes[1].axhline(12.8, color='magenta', linewidth=4, label='Charged')
-        axes[1].axhline(13.8, color='red', linewidth=2, linestyle=':', label='Float')
-        axes[1].axhline(14.4, color='red', linewidth=3, linestyle=':', label='Absorption')
+        axes[1].plot(time, v, color='red', linewidth=4, label='BAT')
+        axes[1].axhline(12.1, color='magenta', linewidth=6, label='EMPTY')
+        axes[1].axhline(12.8, color='magenta', linewidth=4, label='CHARGED')
+        axes[1].axhline(13.8, color='red', linewidth=2, linestyle=':', label='FLOAT')
+        axes[1].axhline(14.4, color='red', linewidth=3, linestyle=':', label='ABSORP')
         axes[1].legend(loc="upper left")
         axes[1].grid(which='major', linestyle='-', linewidth=2, axis='both')
         axes[1].grid(which='minor', linestyle='--', linewidth=1, axis='x')
@@ -56,10 +56,11 @@ def plot_volts(time, vpv, v, ppv, p, pl):
         axes[1].set_title(title, fontsize='x-large')
         axes[1].set_ylabel('Volts [V]')
         axes[1].xaxis.set_major_formatter(dformatter)
-        
-        axes[2].fill_between(time, ppv, color='blue', linewidth=3, label='Panel', alpha=0.5)
-        axes[2].plot(time, -p, color='red', linewidth=4, label='-Battery')
-        axes[2].plot(time, -pl, color='green', linewidth=3, label='-Load', alpha=0.5)
+
+        axes[2].plot(time, ppv, color='blue', linewidth=4, label='PANEL', alpha=0.9)
+        axes[2].fill_between(time, ppv, color='black', label='LOST', alpha=0.3)
+        axes[2].fill_between(time, p+pl, color='green', label='BAT+LOAD', alpha=0.5)
+        axes[2].fill_between(time, p, color='red', label='BAT', alpha=0.7)
         axes[2].legend(loc="upper left")
         axes[2].grid(which='major', linestyle='-', linewidth=2, axis='both')
         axes[2].grid(which='minor', linestyle='--', linewidth=1, axis='x')
@@ -81,7 +82,7 @@ def plot_volts(time, vpv, v, ppv, p, pl):
         
 def show_volts(f = sys.stdin):
     sep = '\t'
-    names = 'TIME,VPV,IPV,PPV,V,I,P,VL,IL,PL'.split(',')
+    names = 'TIME,VPV,IPV,PPV,V,I,P,IL,PL'.split(',')
     df = pd.read_csv(f, sep = sep, names = names)
 
     """ The timestamps """

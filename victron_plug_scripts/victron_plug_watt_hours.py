@@ -17,24 +17,24 @@ INPUT_SAMPLE_RATE = 60   # Apriori knowledge
 
 def sum_power(f = sys.stdin):
     sep = '\t'
-    names = 'TIME,VPV,IPV,PPV,V,I,P,VL,IL,PL'.split(',')
+    names = 'TIME,VPV,IPV,PPV,V,I,P,IL,PL'.split(',')
     df = pd.read_csv(f, sep = sep, names = names)
 
-    vldf = df.loc[:,['TIME', 'PPV', 'P',  'PL']]
-    vldf.PPV = vldf.PPV.apply(strip_unit)
-    vldf.PL = vldf.PL.apply(strip_unit)
-    vldf.P = vldf.P.apply(strip_unit)
+    vdf = df.loc[:,['TIME', 'PPV', 'P',  'PL']]
+    vdf.PPV = vdf.PPV.apply(strip_unit)
+    vdf.PL = vdf.PL.apply(strip_unit)
+    vdf.P = vdf.P.apply(strip_unit)
 
-    ppv_sum = np.sum(np.array(vldf.PPV)) / INPUT_SAMPLE_RATE
-    p_sum = np.sum(np.array(vldf.P)) / INPUT_SAMPLE_RATE
-    pl_sum = np.sum(np.array(vldf.PL)) / INPUT_SAMPLE_RATE
+    ppv_sum = np.sum(np.array(vdf.PPV)) / INPUT_SAMPLE_RATE
+    p_sum = np.sum(np.array(vdf.P)) / INPUT_SAMPLE_RATE
+    pl_sum = np.sum(np.array(vdf.PL)) / INPUT_SAMPLE_RATE
 
-    p_is_charged = vldf.P > 0.0
-    p_is_discharged = vldf.P < 0.0    
-    p_charge_sum = np.sum(np.array(vldf.P)[p_is_charged]) / INPUT_SAMPLE_RATE
-    p_discharge_sum = np.sum(np.array(vldf.P)[p_is_discharged]) / INPUT_SAMPLE_RATE
+    p_is_charged = vdf.P > 0.0
+    p_is_discharged = vdf.P < 0.0    
+    p_charge_sum = np.sum(np.array(vdf.P)[p_is_charged]) / INPUT_SAMPLE_RATE
+    p_discharge_sum = np.sum(np.array(vdf.P)[p_is_discharged]) / INPUT_SAMPLE_RATE
 
-    t_now = vldf.TIME.iloc[-1]
+    t_now = vdf.TIME.iloc[-1]
 
     text = f'TIME {t_now}'
     text += f' SOLAR {ppv_sum:.1f} Wh'

@@ -4,8 +4,8 @@ with open("README.md", 'r') as f:
     long_description = f.read()
     
 setup(name='victron_plug',
-      version='0.2',
-      description='Victron serial VE.Direct decoder',
+      version='0.3',
+      description='Victron plug serial decoder',
       url='https://github.com/r09491/vesocket',
       author='r09491',
       author_email='r09491@gmail.com',
