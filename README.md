@@ -22,4 +22,3 @@ To test:
 * ./victron_plug_print.py host = 'localhost' port = 2323
   -> Dump output to the screen
 
-The script 'victron_plug_mqtt.py' is only ported but not tested yet.
