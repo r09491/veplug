@@ -3,7 +3,8 @@
 
 import sys
 import argparse, os
-import paho.mqtt.client as mqtt
+#import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
 from victron_plug import Victron_Socket, Victron_Serial
 from victron_converters import FULL_CONVERTER, convert 
 
@@ -29,7 +30,7 @@ def main():
         if args.host is not None and args.port is not None and args.device is None:
             vp = Victron_Socket(args.host, args.port)
         elif args.host is None and args.port is None and args.device is not None:
-            vp = VIctron_Serial(args.device)
+            vp = Victron_Serial(args.device)
         else:
             print("Illegal input combination.")
             return 2
@@ -38,24 +39,20 @@ def main():
         print("Cannot connect to Telnet server. Running?")
         return 1
     
-    client = mqtt.Client()
-    client.connect(args.mqttbroker, args.mqttbrokerport, 60)
-    client.loop_start()
 
+    broker = args.mqttbroker
     prefix = args.topicprefix
-    converter = dict([(k, v) for k,v in FULL_CONVERTER.items() if k != 'SER#'])        
-    
+    converter = dict((k, v) for k,v in FULL_CONVERTER.items() if k != 'SER#')
     def mqtt_send_callback(packet, converter):
         converted = convert(packet, converter)
-        for k, v in converted.items():
-            client.publish(prefix + k, v)
+        msgs = ((prefix+k, v) for k, v in converted.items()) 
+        publish.multiple(msgs, hostname=broker)
 
     try:
         vp.convert_packet_loop(mqtt_send_callback, converter)
     except KeyboardInterrupt:
         pass
-    
-    client.loop_stop()
+
     vp.plug.close()
     return 0
 
