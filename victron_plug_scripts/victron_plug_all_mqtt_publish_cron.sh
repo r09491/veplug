@@ -23,4 +23,4 @@
 #   Start the USB Serial App
 #   Execute in Termux
 
-victron_plug_all_mqtt_single.py --host localhost --port 2323 --mqttbroker fish
+victron_plug_all_mqtt_publish_single.py --host localhost --port 2323 --mqttbroker fish

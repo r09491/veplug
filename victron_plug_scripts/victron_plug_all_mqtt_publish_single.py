@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument('--device', help='Serial device', default= None)
     parser.add_argument('--mqttbroker', help='MQTT broker address', type=str, default='test.mosquitto.org')
     parser.add_argument('--mqttbrokerport', help='MQTT broker port', type=int, default='1883')
-    parser.add_argument('--topicprefix', help='MQTT topic prefix', type=str, default='VICTRON_PLUG/')
+    parser.add_argument('--topicprefix', help='MQTT topic prefix', type=str, default='VICTRON/MPPT/')
 
     args = parser.parse_args()
     return args
