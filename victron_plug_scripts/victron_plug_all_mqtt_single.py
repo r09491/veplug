@@ -49,7 +49,8 @@ def main():
         publish.multiple(msgs, hostname=broker)
 
     try:
-        vp.convert_packet_loop(mqtt_send_callback, converter)
+        #vp.convert_packet_loop(mqtt_send_callback, converter)
+        vp.convert_packet_single(mqtt_send_callback, converter)
     except KeyboardInterrupt:
         pass
 

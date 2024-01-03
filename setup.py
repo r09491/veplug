@@ -12,6 +12,8 @@ setup(name='victron_plug',
       license='MIT',
       long_description=long_description,
       scripts=[
+          './victron_plug_scripts/victron_plug_all_mqtt_single.py',
+          './victron_plug_scripts/victron_plug_all_mqtt_single.sh',
           './victron_plug_scripts/victron_plug_latest_single.py',
           './victron_plug_scripts/victron_plug_latest_loop.py',
           './victron_plug_scripts/victron_plug_plot.py',
